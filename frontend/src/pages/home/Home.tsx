@@ -53,7 +53,7 @@ const Home = () => {
                     </h1>
                     <p className="mb-5 text-lg font-medium leading-relaxed">
                         With your donation I can build smart contracts, React apps, servers,
-                        libraries, DevOp tools. Help me to BUILD, BUILD and BUILD.
+                        libraries, DevOp tools. Help me BUILD, BUILD and BUILD.
                     </p>
                     <form method="post" onSubmit={handleSubmit}>
                         <input
