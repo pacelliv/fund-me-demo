@@ -1,8 +1,8 @@
-# Storeth Frontend
+# FundMe Frontend
 
 ## The Graph
 
-This project queries a Subgraph to get data from events emitted by the FundMe contract, to create a subgraph follow this [tutorial](https://thegraph.com/docs/en/deploying/subgraph-studio/), create the subgraph on Arbitrum Sepolia.
+This project queries a Subgraph to get data from events emitted by the FundMe contract, to create a subgraph follow this [tutorial](https://thegraph.com/docs/en/deploying/subgraph-studio/), create the subgraph on the Arbitrum Sepolia network.
 
 ## Quickstart
 
