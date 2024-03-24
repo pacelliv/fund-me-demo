@@ -9,7 +9,7 @@ import { useWeb3ModalProvider, useWeb3ModalAccount } from "@web3modal/ethers/rea
 import SEO from "@/components/SEO";
 
 export async function loader() {
-    return await getEventsData("12");
+    return await getEventsData("1000");
 }
 
 const Home = () => {
