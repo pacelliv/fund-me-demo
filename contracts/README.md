@@ -1,66 +1,68 @@
-## Foundry
+# FundMe Contracts
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+## Quickstart
 
-Foundry consists of:
+Create a keystore
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+```bash
+# 1 encrypt private key:
+cast wallet import test_wallet --interactive
 
-## Documentation
+# 2. insert private key
+# 3. set password
+```
 
-https://book.getfoundry.sh/
+Create a `.env` file with the following format:
 
-## Usage
+```bash
+SENDER=0x123456789abcdef... # address associated with the encrypted private key in keystore
+ARBITRUM_SEPOLIA_RPC_URL=https://arb-sepolia.g.alchemy.com/v2/your-api-key
+ARBISCAN_API_KEY=GWRGWGW121142...
+```
+
+You can get your keys in:
+
+- [Alchemy](https://www.alchemy.com/)
+- [Arbiscan](https://arbiscan.io/)
 
 ### Build
 
-```shell
-$ forge build
+```bash
+make build
 ```
 
-### Test
+### Run tests
 
-```shell
-$ forge test
+```bash
+make test
 ```
 
 ### Format
 
-```shell
-$ forge fmt
+```bash
+make format
 ```
 
-### Gas Snapshots
+### Project commands
 
-```shell
-$ forge snapshot
+#### Deploy contract (FundMe)
+
+```bash
+make deploy_funding ARGS="-d --network arbitrumSepolia"
 ```
 
-### Anvil
+Grab the address of the deployed contract and store it in `script/FundMe.s.sol` line 8.
 
-```shell
-$ anvil
+#### Fund the contract
+
+```bash
+make fund ARGS="-i --network arbitrumSepolia"
 ```
 
-### Deploy
+### Withdraw the funds
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+```bash
+make withdraw ARGS="-i --network arbitrumSepolia"
 ```
 
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+### For more commands check Makefile file
