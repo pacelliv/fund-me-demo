@@ -1,4 +1,4 @@
-# Storeth
+# FundMe Demo
 
 Sample project inspired by the FundMe lesson from Cyfrin Updraft.
 
