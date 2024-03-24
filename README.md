@@ -7,7 +7,7 @@ Sample project inspired by the FundMe lesson from Cyfrin Updraft.
 ### Get Keys
 
 - To use Wallet Connect get project a id from [Cloud Wallet Connect](https://cloud.walletconnect.com/sign-in)
-- To interact with Ethereum get a Sepolia API key from [Alchemy](https://www.alchemy.com/)
+- To interact with the Arbitrum Sepolia network get an API key from [Alchemy](https://www.alchemy.com/)
 - To verify deployed contracts get an API key from [Arbiscan](https://arbiscan.io)
 
 ### More instructions
