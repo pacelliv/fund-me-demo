@@ -14,3 +14,10 @@ Sample project inspired by the FundMe lesson from Cyfrin Updraft.
 
 - [Contracts](https://github.com/pacelliv/fund-me-demo/blob/main/contracts/README.md)
 - [Frontend](https://github.com/pacelliv/fund-me-demo/blob/main/frontend/README.md)
+
+## Todos
+
+- Implement better error handling in frontend
+- Implement 404 page
+- Defer the data queried from the subgraph
+- Create alert components to notify transaction state
