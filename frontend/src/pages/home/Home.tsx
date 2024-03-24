@@ -51,10 +51,13 @@ const Home = () => {
                     <h1 className="mb-6 w-4/5 text-4xl font-bold leading-snug text-white min-[750px]:w-72 min-[960px]:w-96 lg:text-5xl">
                         With your donation you can help me to build cool stuff.
                     </h1>
-                    <p className="mb-5 text-lg font-medium leading-relaxed">
+                    <p className="mb-3 text-lg font-medium leading-relaxed">
                         With your donation I can build smart contracts, React apps, servers,
                         libraries, DevOp tools and a lot more. Help me BUILD.
                     </p>
+                    <em className="mb-5 text-lg font-medium leading-relaxed">
+                        This is a sample project, it uses fake money.
+                    </em>
                     <form method="post" onSubmit={handleSubmit}>
                         <input
                             autoComplete="off"
@@ -63,7 +66,7 @@ const Home = () => {
                             type="text"
                             aria-label="Ether amount to donate"
                             placeholder="1.00"
-                            className="mb-2 block w-full rounded border-2 border-[#463dff] bg-[#0c0b0e] px-3 py-2 font-medium text-[#fff]"
+                            className="mb-2 mt-6 block w-full rounded border-2 border-[#463dff] bg-[#0c0b0e] px-3 py-2 font-medium text-[#fff]"
                             value={amount}
                             onChange={e => setAmount(e.target.value)}
                         />
