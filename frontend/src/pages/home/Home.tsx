@@ -49,7 +49,7 @@ const Home = () => {
             <div className="mx-auto grid w-11/12 max-w-[1000px] grid-cols-[1fr] grid-rows-[auto] gap-6 pb-16 min-[750px]:grid-cols-[1fr,1fr]">
                 <main>
                     <h1 className="mb-6 w-4/5 text-4xl font-bold leading-snug text-white min-[750px]:w-72 min-[960px]:w-96 lg:text-5xl">
-                        With your donation you can help me to build cool stuff.
+                        You can help me to build cool stuff.
                     </h1>
                     <p className="mb-3 text-lg font-medium leading-relaxed">
                         With your donation I can build smart contracts, React apps, servers,
