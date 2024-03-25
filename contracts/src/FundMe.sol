@@ -19,7 +19,7 @@ contract FundMe {
     address private immutable i_owner;
     address[] private s_funders;
     mapping(address => uint256) private s_addressToAmountFunded;
-    AggregatorV3Interface private s_priceFeed;
+    AggregatorV3Interface private immutable s_priceFeed;
 
     // events
     event Fund(address indexed sender, uint256 amount);
@@ -69,9 +69,9 @@ contract FundMe {
         }
         s_funders = new address[](0);
 
+        emit Withdraw(amountToWithdraw);
         (bool success,) = i_owner.call{value: address(this).balance}("");
         if (!success) revert FundMe__WithdrawFailed();
-        emit Withdraw(amountToWithdraw);
     }
 
     /**
