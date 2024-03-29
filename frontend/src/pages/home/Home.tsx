@@ -8,6 +8,23 @@ import { chainContractMap, abi, supportedChains } from "@/constants/build_fundme
 import { useWeb3ModalProvider, useWeb3ModalAccount } from "@web3modal/ethers/react";
 import SEO from "@/components/SEO";
 
+const allowedKeys = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "Backspace",
+    ".",
+    "ArrowRight",
+    "ArrowLeft"
+];
+
 export async function loader() {
     return await getEventsData("1000");
 }
@@ -63,12 +80,15 @@ const Home = () => {
                             autoComplete="off"
                             name="amount"
                             required
-                            type="text"
+                            type="number"
                             aria-label="Ether amount to donate"
                             placeholder="1.00"
                             className="mb-2 mt-6 block w-full rounded border-2 border-[#463dff] bg-[#0c0b0e] px-3 py-2 font-medium text-[#fff]"
                             value={amount}
                             onChange={e => setAmount(e.target.value)}
+                            onKeyDown={e => {
+                                if (!allowedKeys.includes(e.key)) e.preventDefault();
+                            }}
                         />
                         <button
                             disabled={!isConnected}
