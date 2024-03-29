@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import React, { Suspense, useState } from "react";
+import { useLoaderData, defer, Await } from "react-router-dom";
 import { getEventsData } from "@/api/getEventsData";
 import { DataTable } from "@/components/tables/data-table";
 import { columns } from "@/components/tables/columns";
 import { ethers } from "ethers";
 import { chainContractMap, abi, supportedChains } from "@/constants/build_fundme";
 import { useWeb3ModalProvider, useWeb3ModalAccount } from "@web3modal/ethers/react";
+import { Skeleton } from "@/components/ui/skeleton";
+import SkeletonCard from "@/components/SkeletonCard";
 import SEO from "@/components/SEO";
 
 const allowedKeys = [
@@ -26,14 +28,14 @@ const allowedKeys = [
 ];
 
 export async function loader() {
-    return await getEventsData("1000");
+    return defer({ eventsData: getEventsData("1000") });
 }
 
 const Home = () => {
     const { walletProvider } = useWeb3ModalProvider();
     const { isConnected } = useWeb3ModalAccount();
     const [amount, setAmount] = useState("");
-    const data = useLoaderData() as ProcessedData;
+    const data = useLoaderData() as Awaited<Promise<ProcessedData>>;
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -55,6 +57,63 @@ const Home = () => {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    function renderTotalEthDonated(data: ProcessedData) {
+        return (
+            <>
+                <p className="text-2xl font-bold leading-normal text-white">
+                    {data.totalEthDonated} ETH
+                </p>
+                <p className="text-lg font-normal">received as donations</p>
+            </>
+        );
+    }
+
+    function renderTotalDonationsInUsd(data: ProcessedData) {
+        return (
+            <>
+                <p className="text-2xl font-bold leading-normal text-white">
+                    {data.totalDonationsInUsd}
+                </p>
+                <p className="text-lg font-normal">received in usd</p>
+            </>
+        );
+    }
+
+    function renderTotalDonations(data: ProcessedData) {
+        return (
+            <>
+                <p className="text-2xl font-bold leading-normal text-white">
+                    {data.eventsData.length}
+                </p>
+                <p className="text-lg font-normal">total donations</p>
+            </>
+        );
+    }
+
+    function renderUniqueDonors(data: ProcessedData) {
+        return (
+            <>
+                <p className="text-2xl font-bold leading-normal text-white">
+                    {data.qtyUniqueDonors}
+                </p>
+                <p className="text-lg font-normal">unique donors</p>
+            </>
+        );
+    }
+
+    function renderTable(data: ProcessedData) {
+        return (
+            <DataTable
+                columns={columns}
+                data={data.eventsData}
+                borderColor="border-[#ecebf069]"
+                bgColor="bg-[#715db969]"
+                pagination={false}
+                filtering={false}
+            />
+        );
     }
 
     return (
@@ -100,44 +159,36 @@ const Home = () => {
                 </main>
                 <section className="mt-6 grid grid-cols-[repeat(1,1fr)] grid-rows-[repeat(4,1fr)] items-center justify-items-center gap-[2px] overflow-hidden rounded-lg min-[600px]:grid-cols-[repeat(2,1fr)] min-[600px]:grid-rows-[repeat(2,1fr)] min-[750px]:mt-0 min-[750px]:grid-cols-[repeat(1,1fr)] min-[750px]:grid-rows-[repeat(4,1fr)] min-[960px]:grid-cols-[repeat(2,1fr)] min-[960px]:grid-rows-[repeat(2,1fr)]">
                     <div className="m-0 flex h-full w-full flex-col items-center justify-center bg-[#1d1b26] p-6 text-center min-[960px]:p-8">
-                        <p className="text-2xl font-bold leading-normal text-white">
-                            {data.totalEthDonated} ETH
-                        </p>
-                        <p className="text-lg font-normal">received as donations</p>
+                        <Suspense fallback={<Skeleton className="h-[50px] w-10/12" />}>
+                            <Await resolve={data.eventsData}>{renderTotalEthDonated}</Await>
+                        </Suspense>
                     </div>
                     <div className="m-0 flex h-full w-full flex-col items-center justify-center bg-[#1d1b26] p-6 text-center min-[960px]:p-8">
-                        <p className="text-2xl font-bold leading-normal text-white">
-                            {data.totalDonationsInUsd}
-                        </p>
-                        <p className="text-lg font-normal">donated in usd</p>
+                        <Suspense fallback={<Skeleton className="h-[50px] w-10/12" />}>
+                            <Await resolve={data.eventsData}>{renderTotalDonationsInUsd}</Await>
+                        </Suspense>
                     </div>
                     <div className="m-0 flex h-full w-full flex-col items-center justify-center bg-[#1d1b26] p-6 text-center min-[960px]:p-8">
-                        <p className="text-2xl font-bold leading-normal text-white">
-                            {data.eventsData.length}
-                        </p>
-                        <p className="text-lg font-normal">total donations</p>
+                        <Suspense fallback={<Skeleton className="h-[50px] w-10/12" />}>
+                            <Await resolve={data.eventsData}>{renderTotalDonations}</Await>
+                        </Suspense>
                     </div>
                     <div className="m-0 flex h-full w-full flex-col items-center justify-center bg-[#1d1b26] p-6 text-center min-[960px]:p-8">
-                        <p className="text-2xl font-bold leading-normal text-white">
-                            {data.qtyUniqueDonors}
-                        </p>
-                        <p className="text-lg font-normal">unique donors</p>
+                        <Suspense fallback={<Skeleton className="h-[50px] w-10/12" />}>
+                            <Await resolve={data.eventsData}>{renderUniqueDonors}</Await>
+                        </Suspense>
                     </div>
                 </section>
             </div>
+
             <section className="block bg-[#4d22c7]">
                 <div className="mx-auto w-11/12 max-w-[1000px] pb-16 pt-12">
                     <h2 className="mb-6 text-2xl font-medium tracking-tight text-white">
                         Latest donations
                     </h2>
-                    <DataTable
-                        columns={columns}
-                        data={data.eventsData}
-                        borderColor="border-[#ecebf069]"
-                        bgColor="bg-[#715db969]"
-                        pagination={false}
-                        filtering={false}
-                    />
+                    <Suspense fallback={<SkeletonCard />}>
+                        <Await resolve={data.eventsData}>{renderTable}</Await>
+                    </Suspense>
                 </div>
             </section>
         </>

@@ -1,15 +1,30 @@
-import { useLoaderData } from "react-router-dom";
+import { Suspense } from "react";
+import { useLoaderData, defer, Await } from "react-router-dom";
 import { getEventsData } from "@/api/getEventsData";
 import { DataTable } from "@/components/tables/data-table";
 import { columns } from "@/components/tables/columns";
+import SkeletonCard from "@/components/SkeletonCard";
 import SEO from "@/components/SEO";
 
 export async function loader() {
-    return await getEventsData("1000");
+    return defer({ eventsData: getEventsData("1000") });
 }
 
 const Donations = () => {
-    const data = useLoaderData() as ProcessedData;
+    const data = useLoaderData() as Awaited<Promise<ProcessedData>>;
+
+    function renderTable(data: ProcessedData) {
+        return (
+            <DataTable
+                columns={columns}
+                data={data.eventsData}
+                borderColor="border-gray-500"
+                bgColor="bg-transparent"
+                pagination={true}
+                filtering={true}
+            />
+        );
+    }
 
     return (
         <>
@@ -21,14 +36,9 @@ const Donations = () => {
                 <h1 className="mb-8 w-4/5 text-4xl font-bold leading-snug text-white min-[750px]:w-72 min-[960px]:w-96 lg:text-5xl">
                     All Donations
                 </h1>
-                <DataTable
-                    columns={columns}
-                    data={data.eventsData}
-                    borderColor="border-gray-500"
-                    bgColor="bg-transparent"
-                    pagination={true}
-                    filtering={true}
-                />
+                <Suspense fallback={<SkeletonCard />}>
+                    <Await resolve={data.eventsData}>{renderTable}</Await>
+                </Suspense>
             </main>
         </>
     );
