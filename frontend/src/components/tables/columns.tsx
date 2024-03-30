@@ -19,7 +19,7 @@ export const columns: ColumnDef<ProcessedFundEvents>[] = [
             return (
                 <div className="p-2">
                     <a
-                        className="flex items-center gap-x-2 hover:text-white/70"
+                        className="flex items-center gap-x-1 hover:text-white/70"
                         href={`https://sepolia.arbiscan.io/tx/${txHash}`}
                     >
                         {txHash.slice(0, 10)}...{txHash.slice(-8)}
