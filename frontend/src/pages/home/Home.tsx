@@ -6,26 +6,27 @@ import { columns } from "@/components/tables/columns";
 import { ethers } from "ethers";
 import { chainContractMap, abi, supportedChains } from "@/constants/build_fundme";
 import { useWeb3ModalProvider, useWeb3ModalAccount } from "@web3modal/ethers/react";
+import { handleZodValidation, ValidationError } from "@/lib/handleZodValidation";
 import { Skeleton } from "@/components/ui/skeleton";
+import BigNumber from "bignumber.js";
 import SkeletonCard from "@/components/SkeletonCard";
 import SEO from "@/components/SEO";
+import z from "zod";
 
-const allowedKeys = [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "Backspace",
-    ".",
-    "ArrowRight",
-    "ArrowLeft"
-];
+const FormSchema = z.object({
+    amount: z.custom(
+        (value: unknown) => {
+            if (typeof value !== "string")
+                throw new Error("Invalid input type. Expected a string.");
+
+            const decimalsCount = value.includes(".") ? value.split(".")[1] : "0";
+            const bigNumber = new BigNumber(value);
+            if (bigNumber.isFinite() && decimalsCount.length <= 18 && typeof value === "string")
+                return bigNumber;
+        },
+        { message: "Invalid amount" }
+    )
+});
 
 export async function loader() {
     return defer({ eventsData: getEventsData("1000") });
@@ -34,11 +35,28 @@ export async function loader() {
 const Home = () => {
     const { walletProvider } = useWeb3ModalProvider();
     const { isConnected } = useWeb3ModalAccount();
-    const [amount, setAmount] = useState("");
+    const [errors, setErrors] = useState<ValidationError<typeof FormSchema>>({});
     const data = useLoaderData() as Awaited<Promise<ProcessedData>>;
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        try {
+            if (typeof walletProvider !== "undefined") {
+                const data = Object.fromEntries(new FormData(e.currentTarget));
+
+                handleZodValidation({
+                    data: data,
+                    schema: FormSchema,
+                    onSuccess: async res => await fundContract(res.amount),
+                    onError: setErrors
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function fundContract(amount: string) {
         try {
             if (typeof walletProvider !== "undefined") {
                 const provider = new ethers.BrowserProvider(walletProvider);
@@ -131,23 +149,21 @@ const Home = () => {
                         With your donation I can build smart contracts, React apps, servers,
                         libraries, DevOp tools and a lot more. Help me BUILD.
                     </p>
-                    <em className="mb-5 text-lg font-medium leading-relaxed">
+                    <em className="mb-5 block text-lg font-medium leading-relaxed">
                         This is a sample project, it uses fake money.
                     </em>
                     <form method="post" onSubmit={handleSubmit}>
+                        {errors["amount"] && (
+                            <p className="mb-1 text-sm text-red-500">{errors["amount"]}</p>
+                        )}
                         <input
                             autoComplete="off"
                             name="amount"
                             required
-                            type="number"
+                            type="text"
                             aria-label="Ether amount to donate"
                             placeholder="1.00"
-                            className="mb-2 mt-6 block w-full rounded border-2 border-[#463dff] bg-[#0c0b0e] px-3 py-2 font-medium text-[#fff]"
-                            value={amount}
-                            onChange={e => setAmount(e.target.value)}
-                            onKeyDown={e => {
-                                if (!allowedKeys.includes(e.key)) e.preventDefault();
-                            }}
+                            className="mb-2 block w-full rounded border-2 border-[#463dff] bg-[#0c0b0e] px-3 py-2 font-medium text-[#fff]"
                         />
                         <button
                             disabled={!isConnected}
