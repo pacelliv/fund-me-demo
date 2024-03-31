@@ -51,8 +51,7 @@ const Home = () => {
                 handleZodValidation({
                     data: data,
                     schema: FormSchema,
-                    // onSuccess: async res => await fundContract(res.amount),
-                    onSuccess: async res => {},
+                    onSuccess: async res => await fundContract(res.amount),
                     onError: setErrors
                 });
             }
