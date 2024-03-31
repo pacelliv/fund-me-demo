@@ -19,10 +19,14 @@ const FormSchema = z.object({
             if (typeof value !== "string")
                 throw new Error("Invalid input type. Expected a string.");
 
-            const decimalsCount = value.includes(".") ? value.split(".")[1] : "0";
+            // 1. check if the string includes a dot, this indicates the value includes decimals
+            // 2. then split the value using the dot as the separator to create an array with
+            // the substrings (integer, decimals) as the elements
+            // 3. fetch the element at index 1 (decimals) and get the length
+            // 4. coerce to number
+            const decimalsCount = value.includes(".") ? Number(value.split(".")[1].length) : 0;
             const bigNumber = new BigNumber(value);
-            if (bigNumber.isFinite() && decimalsCount.length <= 18 && typeof value === "string")
-                return bigNumber;
+            if (bigNumber.isFinite() && decimalsCount <= 18) return bigNumber;
         },
         { message: "Invalid amount" }
     )
@@ -47,7 +51,8 @@ const Home = () => {
                 handleZodValidation({
                     data: data,
                     schema: FormSchema,
-                    onSuccess: async res => await fundContract(res.amount),
+                    // onSuccess: async res => await fundContract(res.amount),
+                    onSuccess: async res => {},
                     onError: setErrors
                 });
             }
