@@ -38,9 +38,10 @@ export async function loader() {
 
 const Home = () => {
     const { walletProvider } = useWeb3ModalProvider();
-    const { isConnected } = useWeb3ModalAccount();
+    const { isConnected, chainId } = useWeb3ModalAccount();
     const [errors, setErrors] = useState<ValidationError<typeof FormSchema>>({});
     const data = useLoaderData() as Awaited<Promise<ProcessedData>>;
+    const isCorrectChainId = chainId === supportedChains[0];
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -171,8 +172,8 @@ const Home = () => {
                             className="mb-2 block w-full rounded border-2 border-[#463dff] bg-[#0c0b0e] px-3 py-2 font-medium text-[#fff]"
                         />
                         <button
-                            disabled={!isConnected}
-                            className={`block w-full cursor-not-allowed rounded border-2 border-[#463dff] bg-[#463dff] px-6 py-2 font-medium text-white ${isConnected && "cursor-pointer bg-[#463dff] hover:border-[#372ede] hover:bg-[#372ede]"}`}
+                            disabled={!isConnected || !isCorrectChainId}
+                            className={`block w-full cursor-not-allowed rounded border-2 border-[#463dff] bg-[#463dff] px-6 py-2 font-medium text-white ${isConnected && isCorrectChainId && "cursor-pointer bg-[#463dff] hover:border-[#372ede] hover:bg-[#372ede]"}`}
                         >
                             {isConnected ? "Make a donation" : "Connect wallet"}
                         </button>
