@@ -10,6 +10,7 @@ import { handleZodValidation, ValidationError } from "@/lib/handleZodValidation"
 import { Skeleton } from "@/components/ui/skeleton";
 import BigNumber from "bignumber.js";
 import SkeletonCard from "@/components/SkeletonCard";
+import Stat from "@/components/Stat";
 import SEO from "@/components/SEO";
 import z from "zod";
 
@@ -82,50 +83,6 @@ const Home = () => {
         }
     }
 
-    function renderTotalEthDonated(data: ProcessedData) {
-        return (
-            <>
-                <p className="text-2xl font-bold leading-normal text-white">
-                    {data.totalEthDonated} ETH
-                </p>
-                <p className="text-lg font-normal">received as donations</p>
-            </>
-        );
-    }
-
-    function renderTotalDonationsInUsd(data: ProcessedData) {
-        return (
-            <>
-                <p className="text-2xl font-bold leading-normal text-white">
-                    {data.totalDonationsInUsd}
-                </p>
-                <p className="text-lg font-normal">received in usd</p>
-            </>
-        );
-    }
-
-    function renderTotalDonations(data: ProcessedData) {
-        return (
-            <>
-                <p className="text-2xl font-bold leading-normal text-white">
-                    {data.eventsData.length}
-                </p>
-                <p className="text-lg font-normal">total donations</p>
-            </>
-        );
-    }
-
-    function renderUniqueDonors(data: ProcessedData) {
-        return (
-            <>
-                <p className="text-2xl font-bold leading-normal text-white">
-                    {data.qtyUniqueDonors}
-                </p>
-                <p className="text-lg font-normal">unique donors</p>
-            </>
-        );
-    }
-
     function renderTable(data: ProcessedData) {
         return (
             <DataTable
@@ -182,22 +139,54 @@ const Home = () => {
                 <section className="mt-6 grid grid-cols-[repeat(1,1fr)] grid-rows-[repeat(4,1fr)] items-center justify-items-center gap-[2px] overflow-hidden rounded-lg min-[600px]:grid-cols-[repeat(2,1fr)] min-[600px]:grid-rows-[repeat(2,1fr)] min-[750px]:mt-0 min-[750px]:grid-cols-[repeat(1,1fr)] min-[750px]:grid-rows-[repeat(4,1fr)] min-[960px]:grid-cols-[repeat(2,1fr)] min-[960px]:grid-rows-[repeat(2,1fr)]">
                     <div className="m-0 flex h-full w-full flex-col items-center justify-center bg-[#1d1b26] p-6 text-center min-[960px]:p-8">
                         <Suspense fallback={<Skeleton className="h-[50px] w-10/12" />}>
-                            <Await resolve={data.eventsData}>{renderTotalEthDonated}</Await>
+                            <Await resolve={data.eventsData}>
+                                {(resolvedData: ProcessedData) => (
+                                    <Stat
+                                        stat={resolvedData.totalEthDonated}
+                                        message="received as donations"
+                                        currency="ETH"
+                                    />
+                                )}
+                            </Await>
                         </Suspense>
                     </div>
                     <div className="m-0 flex h-full w-full flex-col items-center justify-center bg-[#1d1b26] p-6 text-center min-[960px]:p-8">
                         <Suspense fallback={<Skeleton className="h-[50px] w-10/12" />}>
-                            <Await resolve={data.eventsData}>{renderTotalDonationsInUsd}</Await>
+                            <Await resolve={data.eventsData}>
+                                {(resolvedData: ProcessedData) => (
+                                    <Stat
+                                        stat={resolvedData.totalDonationsInUsd}
+                                        message="received in usd"
+                                        currency=""
+                                    />
+                                )}
+                            </Await>
                         </Suspense>
                     </div>
                     <div className="m-0 flex h-full w-full flex-col items-center justify-center bg-[#1d1b26] p-6 text-center min-[960px]:p-8">
                         <Suspense fallback={<Skeleton className="h-[50px] w-10/12" />}>
-                            <Await resolve={data.eventsData}>{renderTotalDonations}</Await>
+                            <Await resolve={data.eventsData}>
+                                {(resolvedData: ProcessedData) => (
+                                    <Stat
+                                        stat={resolvedData.eventsData.length}
+                                        message="total donations"
+                                        currency=""
+                                    />
+                                )}
+                            </Await>
                         </Suspense>
                     </div>
                     <div className="m-0 flex h-full w-full flex-col items-center justify-center bg-[#1d1b26] p-6 text-center min-[960px]:p-8">
                         <Suspense fallback={<Skeleton className="h-[50px] w-10/12" />}>
-                            <Await resolve={data.eventsData}>{renderUniqueDonors}</Await>
+                            <Await resolve={data.eventsData}>
+                                {(resolvedData: ProcessedData) => (
+                                    <Stat
+                                        stat={resolvedData.qtyUniqueDonors}
+                                        message="unique donors"
+                                        currency=""
+                                    />
+                                )}
+                            </Await>
                         </Suspense>
                     </div>
                 </section>
