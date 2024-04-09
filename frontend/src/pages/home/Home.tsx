@@ -103,7 +103,7 @@ const Home = () => {
                 description="Application landing page, users can donate ether on this page"
             />
             <div className="mx-auto grid w-11/12 max-w-[1000px] grid-cols-[1fr] grid-rows-[auto] gap-6 pb-16 min-[750px]:grid-cols-[1fr,1fr]">
-                <main>
+                <section>
                     <h1 className="mb-6 w-4/5 text-4xl font-bold leading-snug text-white min-[750px]:w-72 min-[960px]:w-96 lg:text-5xl">
                         You can help me to build cool stuff.
                     </h1>
@@ -136,7 +136,7 @@ const Home = () => {
                             {isConnected ? "Make a donation" : "Connect wallet"}
                         </button>
                     </form>
-                </main>
+                </section>
                 <section className="mt-6 grid grid-cols-[repeat(1,1fr)] grid-rows-[repeat(4,1fr)] items-center justify-items-center gap-[2px] overflow-hidden rounded-lg min-[600px]:grid-cols-[repeat(2,1fr)] min-[600px]:grid-rows-[repeat(2,1fr)] min-[750px]:mt-0 min-[750px]:grid-cols-[repeat(1,1fr)] min-[750px]:grid-rows-[repeat(4,1fr)] min-[960px]:grid-cols-[repeat(2,1fr)] min-[960px]:grid-rows-[repeat(2,1fr)]">
                     <div className="m-0 flex h-full w-full flex-col items-center justify-center bg-[#1d1b26] p-6 text-center min-[960px]:p-8">
                         <Suspense fallback={<Skeleton className="h-[50px] w-10/12" />}>
