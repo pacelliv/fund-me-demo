@@ -124,7 +124,8 @@ const Home = () => {
                             required
                             type="number"
                             step="0.000000000000000001"
-                            aria-label="Ether amount to donate"
+                            aria-label="Amount"
+                            aria-description="Input field to specify the amount of ether to donate"
                             placeholder="1.00"
                             className="mb-2 block w-full rounded border-2 border-[#463dff] bg-[#0c0b0e] px-3 py-2 font-medium text-[#fff]"
                         />
